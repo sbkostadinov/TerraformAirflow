@@ -1,5 +1,5 @@
 output "mwaa_arn" {
-  value = module.Airflow_101221.mwaa_arn
+  value = module.Airflow_231221.mwaa_arn
 }
 
 # Names of Data Input and Output S3 buckets 

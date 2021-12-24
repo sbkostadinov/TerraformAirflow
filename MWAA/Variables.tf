@@ -84,7 +84,12 @@ variable "airflow_configuration_options" {
 
 # networking variables
 variable "vpc_id" {
-    description = "ID of the VPC in which environment resource are created"
+    description = "ID of the VPC in which environment resources are created"
+}
+
+variable "route_table_pub_cidr" {
+    type = string
+    description = "Custom CIDR block for public route table"
 }
 
 variable "internet_gateway_id" {

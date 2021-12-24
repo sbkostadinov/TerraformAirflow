@@ -1,6 +1,7 @@
 resource "aws_mwaa_environment" "this" {
   airflow_configuration_options = var.airflow_configuration_options
 
+
   execution_role_arn = aws_iam_role.this.arn
   name = var.environment_name
   max_workers = var.max_workers
@@ -19,27 +20,27 @@ resource "aws_mwaa_environment" "this" {
   logging_configuration {
     dag_processing_logs {
       enabled = true
-      log_level = "WARNING"
+      log_level = "DEBUG"
     }
 
     scheduler_logs {
       enabled = true
-      log_level = "WARNING"
+      log_level = "INFO"
     }
 
     task_logs {
-      enabled = true
+      enabled = true  
       log_level = "INFO"
     }
 
     webserver_logs {
       enabled = true
-      log_level = "WARNING"
+      log_level = "ERROR"
     }
 
     worker_logs {
       enabled = true
-      log_level = "WARNING"
+      log_level = "CRITICAL"
     }
   }
 

@@ -7,7 +7,7 @@ It also deploys a pair of NAT gateways(one per AVailability zone) which both of 
 resource "aws_subnet" "public" {
   count = var.create_networking_config ? length(var.public_subnet_cidrs): 0
   cidr_block = var.public_subnet_cidrs[count.index]
-  vpc_id = var.vpc_id
+  vpc_id = "${var.vpc_id}"
   map_public_ip_on_launch = true
   availability_zone = count.index % 2 == 0 ? "${var.region}a" : "${var.region}b"
   tags = merge({
@@ -20,7 +20,7 @@ resource "aws_subnet" "private" {
   cidr_block = var.private_subnet_cidrs[count.index]
   vpc_id = var.vpc_id
   map_public_ip_on_launch = false
-  availability_zone = count.index % 2 == 0 ? "${var.region}a" : "${var.region}b"
+  availability_zone = count.index % 1 == 0 ? "${var.region}a" : "${var.region}b"
   tags = merge({
     Name = "mwaa-${var.environment_name}-private-subnet-${count.index}"
   }, var.tags)
@@ -45,10 +45,10 @@ resource "aws_nat_gateway" "this" {
 
 resource "aws_route_table" "public" {
   count = var.create_networking_config ? length(var.public_subnet_cidrs): 0
-  vpc_id = var.vpc_id
+  vpc_id = "${var.vpc_id}"
   route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = var.internet_gateway_id
+    cidr_block = var.route_table_pub_cidr
+    gateway_id = "${var.internet_gateway_id}"
   }
   tags = merge({
     Name = "mwaa-${var.environment_name}-public-routes"
@@ -63,13 +63,13 @@ resource "aws_route_table_association" "public" {
 
 resource "aws_route_table" "private" {
   count = length(aws_nat_gateway.this)
-  vpc_id = var.vpc_id
+  vpc_id = "${var.vpc_id}"
   route {
     cidr_block = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.this[count.index].id
   }
   tags = merge({
-    Name = "mwaa-${var.environment_name}-private-routes-a"
+    Name = "mwaa-${var.environment_name}-private-route-a"
   }, var.tags)
 }
 
@@ -80,7 +80,7 @@ resource "aws_route_table_association" "private" {
 }
 
 resource "aws_security_group" "this" {
-  vpc_id = var.vpc_id
+  vpc_id = "${var.vpc_id}"
   name = "mwaa-${var.environment_name}-no-ingress-sg"
   tags = merge({
     Name = "mwaa-${var.environment_name}-no-ingress-sg"

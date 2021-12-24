@@ -73,7 +73,15 @@ variable "requirements_s3_path" {
     default = null
 }
 
+variable "s3_bucket_name_in" {
+    type = string
+    description = "Name of S3 bucket for storing input data logs"
+}
 
+variable "s3_bucket_name_out" {
+    type = string
+    description = "Name of S3 bucket for storing output data logs"
+}
 
 /*variable "s3_output_bucket_name" {
     type = string
@@ -101,6 +109,12 @@ variable "internet_gateway_id" {
 
 variable "networking_config" {
     description = "Set to true if networking resources (subnets, eip, NAT Gateway and route table) need to be created"
+}
+
+
+variable "route_table_pub_cidr" {
+    type = string
+    description = "Custom CIDR block for public route table"
 }
 
 variable "public_subnet_cidrs" {
