@@ -10,9 +10,11 @@ resource "aws_subnet" "public" {
   vpc_id = "${var.vpc_id}"
   map_public_ip_on_launch = true
   availability_zone = count.index % 2 == 0 ? "${var.region}a" : "${var.region}b"
-  tags = merge({
+  /*Can potentially define different variables for different avialability zones in SystemVars and reference*/
+  tags = {
     Name = "mwaa-${var.environment_name}-public-subnet-${count.index}"
-  }, var.tags)
+    Environment = "${var.environment_name}"
+    }
 }
 
 resource "aws_subnet" "private" {
@@ -20,10 +22,11 @@ resource "aws_subnet" "private" {
   cidr_block = var.private_subnet_cidrs[count.index]
   vpc_id = var.vpc_id
   map_public_ip_on_launch = false
-  availability_zone = count.index % 1 == 0 ? "${var.region}a" : "${var.region}b"
-  tags = merge({
+  availability_zone = count.index % 2 == 0 ? "${var.region}a" : "${var.region}b"
+  tags = {
     Name = "mwaa-${var.environment_name}-private-subnet-${count.index}"
-  }, var.tags)
+    Environment = "${var.environment_name}"
+    }
 }
 
 resource "aws_eip" "this" {
@@ -35,7 +38,7 @@ resource "aws_eip" "this" {
 }
 
 resource "aws_nat_gateway" "this" {
-  count = var.create_networking_config ? length(var.public_subnet_cidrs): 0
+  count = 1         /*Specifies the number of resource instances to be created*/
   allocation_id = aws_eip.this[count.index].id
   subnet_id = aws_subnet.public[count.index].id
   tags = merge({
@@ -44,7 +47,8 @@ resource "aws_nat_gateway" "this" {
 }
 
 resource "aws_route_table" "public" {
-  count = var.create_networking_config ? length(var.public_subnet_cidrs): 0
+  /*Specifies the number of resource instances to be created 2 in this case*/
+  count = var.create_networking_config ? length(var.public_subnet_cidrs): 0 
   vpc_id = "${var.vpc_id}"
   route {
     cidr_block = var.route_table_pub_cidr
@@ -65,18 +69,20 @@ resource "aws_route_table" "private" {
   count = length(aws_nat_gateway.this)
   vpc_id = "${var.vpc_id}"
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block = var.route_table_priv_cidr
     nat_gateway_id = aws_nat_gateway.this[count.index].id
   }
-  tags = merge({
-    Name = "mwaa-${var.environment_name}-private-route-a"
-  }, var.tags)
+  tags = {
+    Name = "mwaa-${var.environment_name}-private-routes"
+    Environment = "${var.environment_name}"
+  }
 }
 
 resource "aws_route_table_association" "private" {
-  count = var.create_networking_config ?  length(aws_subnet.private): 0
+  /*Specifies the number of resource instances to be created as many as there are nat gateways*/
+  count = length(aws_nat_gateway.this)    
   route_table_id = aws_route_table.private[count.index].id
-  subnet_id = aws_subnet.private[count.index].id
+  subnet_id = aws_subnet.private[0].id # aws_subnet.private[count.index].id
 }
 
 resource "aws_security_group" "this" {
@@ -85,12 +91,16 @@ resource "aws_security_group" "this" {
   tags = merge({
     Name = "mwaa-${var.environment_name}-no-ingress-sg"
   }, var.tags  )
+
+  # Allow all inbound traffic NOT SECURE
   ingress {
     from_port = 0
     to_port = 0
-    protocol = "-1"
-    self = true
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    
   }
+  # Allow all outbound traffic
   egress {
     from_port = 0
     to_port = 0

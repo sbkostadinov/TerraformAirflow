@@ -36,6 +36,14 @@ variable "secret_key_id" {
 }
 
 
+variable "webserver_access_mode" {
+    type = string
+    description = "Default: PRIVATE_ONLY"
+    
+
+} 
+
+
 # s3 configuration
 
 variable "source_bucket_arn" {
@@ -82,6 +90,12 @@ variable "airflow_configuration_options" {
     default = {}
 }
 
+
+variable "weekly_maintenance_window_start" {
+    type = string
+    description = "Start date of the maintanance window for the mwaa environment"
+}
+
 # networking variables
 variable "vpc_id" {
     description = "ID of the VPC in which environment resources are created"
@@ -90,6 +104,11 @@ variable "vpc_id" {
 variable "route_table_pub_cidr" {
     type = string
     description = "Custom CIDR block for public route table"
+}
+
+variable "route_table_priv_cidr" {
+    type = string
+    description = "Custom CIDR block for private route table"
 }
 
 variable "internet_gateway_id" {
@@ -124,6 +143,16 @@ variable "create_networking_config" {
   default = true
 }
 
+variable "sg_ingress_cidr" {
+    type = list(string)
+    description = "CIDR block for ingress for Networking/ VPC security group"
+}
+
+variable "sg_egress_cidr" {
+    type = list(string)
+    description = "CIDR block for egress for Networking/ VPC security group"
+}
+
 
 # IAM
 
@@ -148,11 +177,6 @@ variable "environment_class" {
     default = "mw1.small"
 }
 
-variable "webserver_access_mode" {
-    description = "Default: Private only!"
-    type = string
-    default = null
-}
 
 variable "tags" {
     type = map(string)

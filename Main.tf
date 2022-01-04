@@ -1,6 +1,4 @@
-provider "aws"{
-  region = var.region
-}
+
 
 module "Airflow_231221" {
     source = "./MWAA"
@@ -17,6 +15,7 @@ module "Airflow_231221" {
 
     environment_name = "${var.environment_name}"
     route_table_pub_cidr = "${var.route_table_pub_cidr}"
+    route_table_priv_cidr = "${var.route_table_priv_cidr}"
     internet_gateway_id = "${var.internet_gateway_id}"
     private_subnet_cidrs = var.private_subnet_cidrs
     public_subnet_cidrs = var.public_subnet_cidrs
@@ -24,6 +23,10 @@ module "Airflow_231221" {
     source_bucket_arn = "${var.source_bucket_arn}"
     vpc_id = "${var.vpc_id}"
     networking_config = true
+    webserver_access_mode = "${var.webserver_access_mode}"
+    weekly_maintenance_window_start = "${var.weekly_maintenance_window_start}"
+    sg_ingress_cidr = var.sg_ingress_cidr
+    sg_egress_cidr = var.sg_egress_cidr
 
 }
 

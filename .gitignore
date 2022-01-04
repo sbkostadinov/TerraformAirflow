@@ -53,6 +53,6 @@ Thumbs.db
 *backend.tf
 .terraform/
 .terrafrom.lock.hcl/
-*terrafrom.lock.hcl
+*.terraform.lock.hcl
 
 

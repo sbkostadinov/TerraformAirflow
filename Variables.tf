@@ -33,7 +33,14 @@ variable "airflow_version" {
     description = "Airflow version to  be used"
     default = "2.0.2"
 }
- 
+
+
+variable "webserver_access_mode" {
+    type = string
+    description = "Default: PRIVATE_ONLY"
+    
+
+} 
 
 # s3 configuration
 
@@ -96,6 +103,11 @@ variable "airflow_configuration_options" {
     default = {}
 }
 
+variable "weekly_maintenance_window_start" {
+    type = string
+    description = "Start date of the maintanance window for the mwaa environment"
+}
+
 # networking variables
 variable "vpc_id" {
     description = "ID of the VPC in which environment resource are created"
@@ -116,6 +128,12 @@ variable "route_table_pub_cidr" {
     type = string
     description = "Custom CIDR block for public route table"
 }
+
+variable "route_table_priv_cidr" {
+    type = string
+    description = "Custom CIDR block for private route table"
+}
+
 
 variable "public_subnet_cidrs" {
     description = "CIDR blocks for the public subnets used by MWAA. Must be at least 2 if networking_config = true"
@@ -141,6 +159,16 @@ variable "create_networking_config" {
   default = true
 }
 
+variable "sg_ingress_cidr" {
+    type = list(string)
+    description = "CIDR block for ingress for Networking/ VPC security group"
+}
+
+variable "sg_egress_cidr" {
+    type = list(string)
+    description = "CIDR block for egress for Networking/ VPC security group"
+}
+
 
 # IAM
 
@@ -163,12 +191,6 @@ variable "min_workers" {
 
 variable "environment_class" {
     default = "mw1.small"
-}
-
-variable "webserver_access_mode" {
-    description = "Default: Private only!"
-    type = string
-    default = null
 }
 
 variable "tags" {

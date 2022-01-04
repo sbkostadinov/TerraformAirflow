@@ -20,7 +20,7 @@ resource "aws_mwaa_environment" "this" {
   logging_configuration {
     dag_processing_logs {
       enabled = true
-      log_level = "DEBUG"
+      log_level = "INFO"
     }
 
     scheduler_logs {
@@ -35,12 +35,12 @@ resource "aws_mwaa_environment" "this" {
 
     webserver_logs {
       enabled = true
-      log_level = "ERROR"
+      log_level = "INFO"
     }
 
     worker_logs {
       enabled = true
-      log_level = "CRITICAL"
+      log_level = "INFO"
     }
   }
 
