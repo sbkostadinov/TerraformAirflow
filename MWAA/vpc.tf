@@ -110,3 +110,27 @@ resource "aws_security_group" "this" {
     ]
   }
 }
+
+resource "aws_vpc_endpoint" "s3_endp" {
+  vpc_id = "${var.vpc_id}"
+  service_name = "com.amazonaws.${var.region}.s3"
+  vpc_endpoint_type  = "Gateway" 
+}
+
+resource "aws_vpc_endpoint" "sqs_endp" {
+  vpc_id = "${var.vpc_id}"
+  service_name = "com.amazonaws.${var.region}.sqs"
+  vpc_endpoint_type  = "Interface" 
+}
+
+resource "aws_vpc_endpoint" "kms_endp" {
+  vpc_id = "${var.vpc_id}"
+  service_name = "com.amazonaws.${var.region}.kms"
+  vpc_endpoint_type  = "Interface" 
+}
+
+resource "aws_vpc_endpoint" "cloudwatch_endp" {
+  vpc_id = "${var.vpc_id}"
+  service_name = "com.amazonaws.${var.region}.cloudwatch"
+  vpc_endpoint_type  = "Interface" 
+}
