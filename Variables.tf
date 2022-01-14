@@ -110,19 +110,13 @@ variable "weekly_maintenance_window_start" {
 
 # networking variables
 variable "vpc_id" {
-    description = "ID of the VPC in which environment resource are created"
-
+    description = "ID of the VPC in which environment resources are created"
 }
 
-
-variable "internet_gateway_id" {
-    description = "ID of the VPC in which environment resource are created"
+variable "vpc_cidr" {
+    type = string
+    description = "CIDR block for vpc to use"
 }
-
-variable "networking_config" {
-    description = "Set to true if networking resources (subnets, eip, NAT Gateway and route table) need to be created"
-}
-
 
 variable "route_table_pub_cidr" {
     type = string
@@ -134,6 +128,13 @@ variable "route_table_priv_cidr" {
     description = "Custom CIDR block for private route table"
 }
 
+variable "internet_gateway_id" {
+    description = "ID of the VPC in which environment resource are created"
+}
+
+variable "networking_config" {
+    description = "Set to true if networking resources (subnets, eip, NAT Gateway and route table) need to be created"
+}
 
 variable "public_subnet_cidrs" {
     description = "CIDR blocks for the public subnets used by MWAA. Must be at least 2 if networking_config = true"
@@ -168,7 +169,6 @@ variable "sg_egress_cidr" {
     type = list(string)
     description = "CIDR block for egress for Networking/ VPC security group"
 }
-
 
 # IAM
 

@@ -4,6 +4,7 @@ It also deploys a pair of NAT gateways(one per AVailability zone) which both of 
 */
 
 
+
 resource "aws_subnet" "public" {
   count = var.create_networking_config ? length(var.public_subnet_cidrs): 0
   cidr_block = var.public_subnet_cidrs[count.index]

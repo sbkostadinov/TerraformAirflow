@@ -1,4 +1,12 @@
 
+#VPC
+module "VPC" {
+  source = "./VPC"
+  vpc_cidr = "${var.vpc_cidr}"
+  environment_name = "${var.environment_name}"
+
+}
+
 
 module "Airflow_231221" {
     source = "./MWAA"
@@ -6,28 +14,30 @@ module "Airflow_231221" {
    After this is done upload the SystemVariables.tfvars to an S3 backend and encrypt using KMS
     access_key_id = "${var.access_key_id}"
     secret_key_id = "${var.secret_key_id}" */
-
+    
+    # general MWAA environment 
 
     access_key_id = "${var.access_key_id}"
     secret_key_id = "${var.secret_key_id}"
     airflow_version = var.airflow_version
     account_id = "${var.account_id}"
-
     environment_name = "${var.environment_name}"
+    region = "${var.region}"
+    source_bucket_arn = "${var.source_bucket_arn}"
+    weekly_maintenance_window_start = "${var.weekly_maintenance_window_start}"
+    webserver_access_mode = "${var.webserver_access_mode}"
+
+    # networking 
     route_table_pub_cidr = "${var.route_table_pub_cidr}"
     route_table_priv_cidr = "${var.route_table_priv_cidr}"
     internet_gateway_id = "${var.internet_gateway_id}"
     private_subnet_cidrs = var.private_subnet_cidrs
     public_subnet_cidrs = var.public_subnet_cidrs
-    region = "${var.region}"
-    source_bucket_arn = "${var.source_bucket_arn}"
-    vpc_id = "${var.vpc_id}"
-    networking_config = true
-    webserver_access_mode = "${var.webserver_access_mode}"
-    weekly_maintenance_window_start = "${var.weekly_maintenance_window_start}"
     sg_ingress_cidr = var.sg_ingress_cidr
     sg_egress_cidr = var.sg_egress_cidr
-
+    networking_config = true
+    vpc_id = module.VPC.id
+    
 }
 
 data aws_iam_policy_document "additional_execution_policy_doc" {
@@ -40,6 +50,8 @@ data aws_iam_policy_document "additional_execution_policy_doc" {
       "<YourResource>"]
   }
 }
+
+
 
 module "File_INPUT_S3" {
 

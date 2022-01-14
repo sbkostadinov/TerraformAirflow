@@ -9,7 +9,8 @@ region = "eu-west-1"            #CHANGE
 environment_name = "Development221221" #CHANGE
 
 # VPC
-vpc_id = "vpc-1012214672510"   #CHANGE
+vpc_id = "vpc-fake123"
+vpc_cidr = "10.0.0.0/24"                  #CHANGE   
 internet_gateway_id = "ig-101221885409"   #CHANGE
 route_table_pub_cidr = "0.0.0.0/0"
 route_table_priv_cidr = "0.0.0.0/80"       #CHANGE

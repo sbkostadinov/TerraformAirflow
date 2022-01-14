@@ -44,58 +44,6 @@ variable "webserver_access_mode" {
 } 
 
 
-# s3 configuration
-
-variable "source_bucket_arn" {
-    type = string
-    description = "ARN of s3 bucket which hosts DAGS, Plugins"
-
-}
-
-variable "dag_s3_path" {
-    type = string
-    description = "Relative path of the dags folder within the source bucket"
-    default = "/dags"
-
-}
-
-variable "plugins_s3_path" {
-    type = string
-    description = "Relative path of the plugins.zip within the source bucket"
-    default = null
-
-}
-
-variable "plugins_s3_object_version" {
-    default = null
-
-}
-
-
-variable "requirements_s3_object_version" {
-    default = null
-}
-
-variable "requirements_s3_path" {
-    type = string
-    description = "relative path of the requirements.txt (incl filename) within the source bucket"
-    default = null
-}
-
-# airflow.cfg values
-
-variable "airflow_configuration_options" {
-    type = map(string)
-    description = "additional airflow configuration options"
-    default = {}
-}
-
-
-variable "weekly_maintenance_window_start" {
-    type = string
-    description = "Start date of the maintanance window for the mwaa environment"
-}
-
 # networking variables
 variable "vpc_id" {
     description = "ID of the VPC in which environment resources are created"
@@ -152,6 +100,60 @@ variable "sg_egress_cidr" {
     type = list(string)
     description = "CIDR block for egress for Networking/ VPC security group"
 }
+
+# s3 configuration
+
+variable "source_bucket_arn" {
+    type = string
+    description = "ARN of s3 bucket which hosts DAGS, Plugins"
+
+}
+
+variable "dag_s3_path" {
+    type = string
+    description = "Relative path of the dags folder within the source bucket"
+    default = "/dags"
+
+}
+
+variable "plugins_s3_path" {
+    type = string
+    description = "Relative path of the plugins.zip within the source bucket"
+    default = null
+
+}
+
+variable "plugins_s3_object_version" {
+    default = null
+
+}
+
+
+variable "requirements_s3_object_version" {
+    default = null
+}
+
+variable "requirements_s3_path" {
+    type = string
+    description = "relative path of the requirements.txt (incl filename) within the source bucket"
+    default = null
+}
+
+# airflow.cfg values
+
+variable "airflow_configuration_options" {
+    type = map(string)
+    description = "additional airflow configuration options"
+    default = {}
+}
+
+
+variable "weekly_maintenance_window_start" {
+    type = string
+    description = "Start date of the maintanance window for the mwaa environment"
+}
+
+
 
 
 # IAM
