@@ -26,3 +26,6 @@ sg_egress_cidr = ["0.0.0.0/0"]
 source_bucket_arn = "arn:aws:s3:::MyMwaaBucket231221"   #CHANGE
 s3_bucket_name_in = "DevInp231221"                      #CHANGE
 s3_bucket_name_out = "DevOutp231221"                    #CHANGE
+
+# IAM Role
+mwaa_env_arn = "not-environment-243"

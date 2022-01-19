@@ -11,7 +11,7 @@ resource "aws_iam_role" "mwaa_read_only" {
                 "airflow:ListTagsForResource"
                 ]   
                 Effect = "Allow"
-                Resource = "*"
+                Resource =  "${var.mwaa_env_arn}" /*"arn:aws:airflow:${var.region}:${var.account_id}:environment/${var.environment_name}"*/
             },
         ]
     })

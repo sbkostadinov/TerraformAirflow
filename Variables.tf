@@ -197,3 +197,8 @@ variable "tags" {
     type = map(string)
     default = {}
 }
+
+ variable "mwaa_env_arn" {
+    type = string
+    description = "ARN of MWAA Environment"
+}
