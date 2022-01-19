@@ -7,6 +7,13 @@ module "VPC" {
 
 }
 
+# Additional IAM Read Only Access Role
+module "IAM_READ_ACCESS" {
+  source = "./IAM-READ-ONLY"
+  
+  environment_name = "${var.environment_name}"
+}
+
 
 module "Airflow_231221" {
     source = "./MWAA"

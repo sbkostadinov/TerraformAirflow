@@ -24,7 +24,7 @@ resource "aws_s3_bucket" "file_storage" {
 
 
 resource "aws_s3_bucket_public_access_block" "file_storage_access"{
-    bucket = var.s3_bucket_name
+    bucket = "${var.environment_name}-${var.s3_bucket_name}"
     block_public_acls = true
     block_public_policy = true
     ignore_public_acls = true
