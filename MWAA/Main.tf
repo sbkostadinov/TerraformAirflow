@@ -1,8 +1,8 @@
-resource "aws_mwaa_environment" "this" {
+resource "aws_mwaa_environment" "mwaa_dev" {
   airflow_configuration_options = var.airflow_configuration_options
 
 
-  execution_role_arn = aws_iam_role.this.arn
+  execution_role_arn = aws_iam_role.exec-role.arn
   name = var.environment_name
   max_workers = var.max_workers
   min_workers = var.min_workers
@@ -46,7 +46,7 @@ resource "aws_mwaa_environment" "this" {
 
   network_configuration {
     security_group_ids = [
-      aws_security_group.this.id]
+      aws_security_group.mwaa_sg.id]
     subnet_ids = var.create_networking_config ? aws_subnet.private[*].id : var.private_subnet_ids
   }
 

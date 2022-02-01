@@ -1,13 +1,13 @@
-resource "aws_iam_role" "this" {
+resource "aws_iam_role" "exec-role" {
   name = "mwaa-${var.environment_name}-execution-role"
   assume_role_policy = data.aws_iam_policy_document.assume.json
   tags = var.tags
 }
 
-resource "aws_iam_role_policy" "this" {
+resource "aws_iam_role_policy" "exec-policy" {
   name = "mwaa-${var.environment_name}-execution-policy"
-  policy = data.aws_iam_policy_document.this.json
-  role = aws_iam_role.this.id
+  policy = data.aws_iam_policy_document.mwaa_policyd.json
+  role = aws_iam_role.exec-role.id
 }
 
 data "aws_iam_policy_document" "assume" {
@@ -27,6 +27,7 @@ data "aws_iam_policy_document" "assume" {
   }
 }
 
+
 data "aws_iam_policy_document" "base" {
   version = "2012-10-17"
   statement {
@@ -45,7 +46,7 @@ data "aws_iam_policy_document" "base" {
       "s3:GetBucket*",
       "s3:List*"
     ]
-    resources = [
+    resources = [ 
       var.source_bucket_arn,
       "${var.source_bucket_arn}/*",
     ]
@@ -118,7 +119,7 @@ data "aws_iam_policy_document" "base" {
   }
 }
 
-data "aws_iam_policy_document" "this" {
+data "aws_iam_policy_document" "mwaa_policyd" {
   source_policy_documents = [
     data.aws_iam_policy_document.base.json,
     var.additional_execution_role_policy_document_json

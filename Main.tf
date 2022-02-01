@@ -77,6 +77,7 @@ module "File_OUTPUT_S3" {
 
 # Additional IAM Read Only Access Role
 module "IAM_READ_ACCESS" {
+  
   source = "./IAM-READ-ONLY"
   environment_name = "${var.environment_name}"
   mwaa_env_arn = module.Airflow_231221.mwaa_arn
